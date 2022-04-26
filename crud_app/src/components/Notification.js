@@ -13,7 +13,7 @@ const Notification = ({ notification }) => {
       borderRadius: 5,
       padding: 10,
       marginBottom: 10,
-      height :100,
+      height :50,
       width:200
     }
 
