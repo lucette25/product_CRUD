@@ -1,30 +1,48 @@
-import React from 'react'
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Table, Button} from 'react-bootstrap';
 
-const Products = ({ products, handleDelete }) => {
-  return <>
-    <h2>Produits</h2>
-    <table>
-      <tbody>
-        <tr>
-        <td>Noms</td>
-          <td>Prix</td>
-          <td>Quantités</td>
-        </tr>
-    {products.map(product =>
+
+const Products = ({ products,handleDelete,handleUpdate }) => {
+
+  
+    return (<div className='container'>
+    <Table striped bordered hover>
+  <thead>
+    <tr>
+      <th> Noms</th>
+      <th>Prix</th>
+      <th>Quantités</th>
+      <th>Actions</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {products.map(product =>
       <tr key={product.id}>
         <td>{product.name}</td>
         <td>{product.price}</td>
         <td>{product.quantity}</td>
         <td> 
-          <button onClick={()=>handleDelete(product.id)} className='delButton'>
-          Surpprimer
-          </button>
+      
+  <Button variant="primary" type="submit" onClick={()=>handleUpdate(product.id)}>
+  Modifier
+  </Button>
+  <Button variant="danger" type="submit" onClick={()=>handleDelete(product.id)}>
+  Supprimer
+  </Button>
           </td>
       </tr>
     )}
-    </tbody>
-  </table>
-  </>
+    
+  </tbody>
+</Table>
+    </div>)
+      
+    
+        
+
+  
 }
 
 export default Products

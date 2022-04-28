@@ -1,27 +1,28 @@
 import React from 'react'
+import { ToastContainer ,Toast } from 'react-bootstrap';
+
 
 const Notification = ({ notification }) => {
     if (notification === null) {
       return null
     }
   
-    const style = {
-      color: notification.type === 'alert' ? 'red' : 'green',
-      background: 'lightgrey',
-      fontSize: 20,
-      borderStyle: 'solid',
-      borderRadius: 5,
-      padding: 10,
-      marginBottom: 10,
-      height :50,
-      width:200
-    }
-
+   
   
     return (
-      <div style={style}>
-        {notification.message}
+      <div classename="container">
+         <ToastContainer position="top-end" className="p-3">
+    <Toast>
+      <Toast.Header>
+        <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
+        <strong className="me-auto">Modification</strong>
+        
+      </Toast.Header>
+      <Toast.Body>{notification.message}</Toast.Body>
+    </Toast>
+    </ToastContainer>
       </div>
+     
     )
   }
   

@@ -1,38 +1,30 @@
 import React from 'react'
-const Form = ({ addProduct, name, price,quantity, handleNameChange, handlePriceChange,handleQuantityChange}) => <>
+import { Form,Button } from 'react-bootstrap';
 
-  <form onSubmit={addProduct} >
-  <table>
-      <tbody>
-      <tr>
-      <td>Nom : </td>
-      <td> <input
-        onChange={handleNameChange}
-      /> 
-      </td>
-    </tr>
-    <tr>
-    <td>Prix: </td>
-    <td><input
-        onChange={handlePriceChange}
-      /> 
-      </td>
-    </tr>
-    <tr>
-    <td>Quantité:</td>
-    <td> <input
-        onChange={handleQuantityChange}
-      /> </td>
-    </tr>
-    <tr>
-    <td>
-      <button type="submit" className='button'>Ajouter</button>
-    </td>
-    </tr>    
-      </tbody>
-  </table>
-  </form>
-  
-</>
 
-export default Form
+const Formulaire = ({ addProduct, name, price,quantity, handleNameChange, handlePriceChange,handleQuantityChange}) =>{
+
+return (<div className='container'>
+<Form>
+<Form.Group className="mb-3" controlId="formBasicEmail" onChange={handleNameChange}>
+    <Form.Label>Nom </Form.Label>
+    <Form.Control type="text" placeholder="Entrez le nom du produit" />
+</Form.Group>
+
+<Form.Group className="mb-3" controlId="formBasicEmail" onChange={handlePriceChange}>
+    <Form.Label> Prix </Form.Label>
+    <Form.Control type="text" placeholder="Entrez le prix du produit" />
+</Form.Group>
+<Form.Group className="mb-3" controlId="formBasicEmail" onChange={handleQuantityChange}>
+    <Form.Label> Quantité </Form.Label>
+    <Form.Control type="text" placeholder="Entrez la quantité du produit" />
+</Form.Group>
+  <Button variant="success" type="submit" onClick={addProduct}>
+    Ajouter
+  </Button>
+</Form>
+</div>)}
+
+
+
+export default Formulaire
