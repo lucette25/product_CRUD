@@ -19,12 +19,8 @@ const App = () => {
 
   const [filter, setFilter] = useState('')
   const [notification, setNotification] = useState(null)
-  const [toChange, setToChange] = useState('')
+  const [toChange, setToChange] = useState([])
   const [show, setShow] = useState(false);
-
-
-
-
 
   useEffect(() => {
     productService.getAll().then(products=> {
@@ -39,8 +35,6 @@ const App = () => {
     }, 3000)
   }
 
-
-  
   const addProduct = (event) => {
     event.preventDefault()
     const newProduct = {
@@ -48,16 +42,11 @@ const App = () => {
       price: newPrice,
       quantity: newQuantity
     }
-
-
-
     const existingProduct = products.find(p => p.name === newProduct.name)
     if ( existingProduct ) {
         window.alert(`${existingProduct.name} existe déjà dans le stock, clicquez sur modifier pour modifier`)
         return 
     }
-
-    
 
     productService.create(newProduct).then(savedPerson => {
       setProducts(products.concat(savedPerson))
@@ -65,61 +54,58 @@ const App = () => {
     })
   }
 
-  const update = (id) => {
-    const existingProduct = products.find(p => p.id === id)
+const update = (id) => {
+  const existingProduct = products.find(p => p.id === id)
 
-    const ok = window.confirm(`${existingProduct.name} existe déjà dans le stock, mettre à jour les informations?`)
-    if (ok) {
-   
-    const existingProduct = products.find(p => p.id === id)
-    setShow(true)
-    setToChange(existingProduct.name)
-    }
-  }
+  const ok = window.confirm(`${existingProduct.name} existe déjà dans le stock, mettre à jour les informations?`)
+  if (ok) {
   
-  const updateProduct = (name) => {
-    const existingProduct = products.find(p => p.name === name)
-
-    console.log(existingProduct)
-    console.log(newPrice)
-    productService.update(existingProduct.id, {...existingProduct, price: newPrice, quantity : newQuantity }).then(savedPerson => {
-      setProducts(products.map(p => p.id === existingProduct.id ? savedPerson : p ))
-      notify(` Informations de ${savedPerson.name} mises à jour`)
-    }).catch(error => {
-      notify(
-         `${existingProduct.name} a déjà été supprimée `, 'alert'
-       )
-       setProducts(products.filter(p => p.id !== existingProduct.id))
-     })
-
-    setShow(false)
-
+  const existingProduct = products.find(p => p.id === id)
+  setShow(true)
+  setToChange([existingProduct.name,existingProduct.price,existingProduct.quantity])
   }
+}
+  
+const updateProduct = (name) => {
+  const existingProduct = products.find(p => p.name === name)
+  productService.update(existingProduct.id, {...existingProduct, price: newPrice, quantity : newQuantity }).then(savedPerson => {
+    setProducts(products.map(p => p.id === existingProduct.id ? savedPerson : p ))
+    notify(` Informations de ${savedPerson.name} mises à jour`)
+  }).catch(error => {
+      notify(
+          `${existingProduct.name} a déjà été supprimée `, 'alert'
+        )
+        setProducts(products.filter(p => p.id !== existingProduct.id))
+    })
+  setShow(false)
+}
 
-  const productsToShow = (filter.length === 0) ? products :
-    products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
+const productsToShow = (filter.length === 0) ? products :
+  products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()))
 
-    const deleteProduct = (id) => { 
-     const toDelete = products.find(p => p.id === id)
-      const ok = window.confirm(` Voulez vous vraiment supprimer ${toDelete.name} ?`)
-      if (ok) {
-        productService.remove(id).then(() => {
-          setProducts(productsToShow.filter(p => p.id !== id))
-          notify(`${toDelete.name} est supprimé`)
-        })  
-      }
-    }
-    
+const deleteProduct = (id) => { 
+  const toDelete = products.find(p => p.id === id)
+  const ok = window.confirm(` Voulez vous vraiment supprimer ${toDelete.name} ?`)
+  if (ok) {
+    productService.remove(id).then(() => {
+      setProducts(productsToShow.filter(p => p.id !== id))
+      notify(`${toDelete.name} est supprimé`)
+    })  
+  }
+}
+  
 
   return (
     <div>
       <Notification notification={notification} />
       <UpdateForm show={show}
-       setShow={setShow} 
-       name={toChange}
-       update={updateProduct}
-       handlePriceChange={({ target }) => setNewPrice(target.value)}
-       handleQuantityChange={({ target }) => setNewQuantity(target.value)}
+        setShow={setShow} 
+        name={toChange[0]}
+        price={toChange[1]}
+        quantity={toChange[2]}
+        update={updateProduct}
+        handlePriceChange={({ target }) => setNewPrice(target.value)}
+        handleQuantityChange={({ target }) => setNewQuantity(target.value)}
 
           />
 
